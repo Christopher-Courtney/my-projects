@@ -1,0 +1,72 @@
+//Christopher Courtney
+
+public class LinkedListMainClass {
+
+    public static void main(String[] args) {
+
+        System.out.println("Define a new list");
+        LinkedListClass<String> list = new LinkedListClass <String>();
+        System.out.println(list.toString());
+
+
+        System.out.println("Put in front a,b,c,d");
+
+        try {
+            System.out.println(list.getFirst());
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
+
+        try {
+            System.out.println(list.getLast());
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
+        list.addFirst("a");
+        System.out.println(list.getFirst());
+        list.addFirst("b");
+        list.addFirst("c");
+        list.addFirst("d");
+        System.out.println(list.getLast());
+        System.out.println(list.contains("a"));
+        System.out.println(list.contains("b"));
+        System.out.println(list.contains("c"));
+        System.out.println(list.contains("d"));
+        System.out.println(list.getFirst());
+        System.out.println(list.getLast());
+        list.removeFirst();
+        System.out.println(list.toString());
+
+        System.out.println("get() an out of bounds exception");
+        try {
+            System.out.println(list.get(21));
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
+        System.out.println(list.contains("a"));
+        System.out.println();
+
+        System.out.println("use an iterator to produce the list");
+    /*Iterator<String> listIterator = list.iterator();
+
+    while(listIterator.hasNext()) {
+        System.out.print(listIterator.next() + " ");
+
+    }*/
+        System.out.println();
+        list.clear();
+        try {
+            System.out.println(list.getFirst());
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+}
