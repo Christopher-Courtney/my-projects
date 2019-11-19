@@ -1,0 +1,251 @@
+import java.util.*;
+
+public class LinkedListClass<Type> implements Iterable<Type> {
+
+    private Node<Type> head;
+
+    //  Constructs an empty list
+    public LinkedListClass() {
+        head = null;
+    }
+
+    //  Returns true if the list is empty
+    public boolean isEmpty() {
+        return head == null;
+    }
+
+
+    // Inserts a new node at the beginning of this list.
+    public void addFirst(Type item) {
+        Node<Type> temp = new Node<Type>(item, head);
+        head = temp;
+    }
+
+    // if empty throw new NoSuchElementException()
+    // Returns the first element in the list.
+    public Type getFirst() {
+        if(this.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return head.data;
+    }
+
+    // Removes the first element in the list.
+    public Type removeFirst() {
+        if (!(this.isEmpty())) {
+            head = head.next;
+            return head.data;
+        }
+
+        else
+            return null;
+    }
+
+    // if list is empty do addFirst()
+    // Insert a new node to the end of this list.
+    public void addLast(Type item) {
+        if (this.isEmpty()) {
+            addFirst(item);
+        }
+        Node<Type> temp = head;
+        while(temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = new Node<Type>(item, null);
+    }
+
+    // if empty throw new NoSuchElementException()
+    // Returns the last element in the list.
+    public Type getLast() {
+        if (this.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Node<Type> temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        return temp.data;
+    }
+
+    // Removes all nodes from the list.
+    public void clear() {
+        head = null;
+    }
+
+    // Returns true if this list contains the specified element.
+    public boolean contains(Type data) {
+        Node<Type> temp = head;
+        while (temp != null) {
+            if (temp.data == data) {
+                return true;
+            }
+            temp = temp.next;
+        }
+        return false;
+    }
+
+    // if empty throw new IndexOutOfBoundsException()
+    // Returns the data at the specified position in the list.
+    public Type get(int position) {
+        int counter = 0;
+        Node<Type> temp = head;
+        while (temp != null) {
+            counter++;
+            if (counter == position) {
+                return temp.data;
+            }
+
+        }
+
+        return null;
+    }
+
+    // Inserts a new node after a node containing the key.
+    public void insertAfter(Type key, Type toInsert) {
+        //$
+        Node<Type> temp = head;
+        while (temp != null) {
+            if (temp.data == key) {
+                Node<Type> one = new Node<Type>(toInsert, temp.next);
+                temp.next = one;
+                return;
+            }
+            temp = temp.next;
+
+        }
+    }
+
+    // if list is empty just return with no action
+    //  Inserts a new node before a node containing the key.
+    public void insertBefore(Type key, Type toInsert) {
+        int counter = 0;
+        if (this.isEmpty()) {
+            return;
+        }
+        Node<Type> temp = head;
+        Node<Type> temp2 = head;
+        while (temp != null) {
+            counter++;
+            if (temp.data == key) {
+                for (int x = 0; x < counter; x++) {
+                    temp2 = temp2.next;
+                }
+                Node<Type> one = new Node<Type>(toInsert, temp2.next);
+                temp.next = one;
+                return;
+            }
+            temp = temp.next;
+        }
+
+
+    }
+
+    // If empty throw new RuntimeException("list is empty, cannot remove")
+    // Removes the first occurrence of the specified element in this list
+    // if not found throw new RuntimeException("element not found, cannot remove")
+    public void remove(Type key) {
+        if (this.isEmpty()){
+            throw new RuntimeException("list is empty, cannot remove");
+        }
+        Node<Type> temp = head;
+        Node<Type> temp2 = head;
+        int counter = 0;
+        while (temp != null) {
+            if (temp.data == key) {
+                counter--;
+                for (int x = 0; x < counter; x++) {
+                    temp2 = temp2.next;
+                }
+                temp = temp.next;
+                temp2.next = temp;
+                return;
+            }
+            temp = temp.next;
+            counter++;
+        }
+        throw new RuntimeException("element not found, cannot remove");
+    }
+
+    // Returns a deep copy of the list
+    public Node<Type> deepcopy() {
+        Node<Type> copy = head;
+        Node<Type> temp = head;
+        while (temp != null) {
+            copy.data = temp.data;
+            copy.next = temp.next;
+            temp = temp.next;
+        }
+        copy = head;
+        return copy;
+    }
+
+    // Reverses the list
+    public Node<Type> reverse() {
+        Node<Type> reverse = null;
+        Node<Type> temp = head;
+        while (temp != null) {
+            Node<Type> next = temp.next;
+            temp.next = reverse;
+            reverse = temp;
+            temp = next;
+        }
+        head = reverse;
+        return reverse;
+    }
+
+    // Node class
+    private static class Node<Type> {
+        private Type data;
+        private Node<Type> next;
+
+        public Node(Type data, Node<Type> next) {
+            this.data = data;
+            this.next = next;
+        }
+    }
+
+    // Iterator class
+    public Iterator<Type> iterator() {
+        return new LinkedListIterator();
+    }
+
+    // Implementation
+    private class LinkedListIterator implements Iterator<Type> {
+        private Node<Type> nextNode;
+
+        //Iterator constructor
+        public LinkedListIterator() {
+            nextNode = head;
+        }
+
+        // return true if nextNode not null, else false
+        public boolean hasNext() {
+            return nextNode != null;
+        }
+
+        // if there is not a hasNext() throw new NoSuchElementException();
+        // return the next data
+        public Type next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Type nextData = nextNode.data;
+            nextNode      = nextNode.next;
+            return nextData;
+        }
+    }//Iterator
+
+    // Returns a string representation of linkeed list for use by main
+    public String toString() {
+        Node<Type>it = head;
+        StringBuffer constructString = new StringBuffer();
+        constructString.append("Linked list is " + ((isEmpty()) ? "empty" : "not empty")  + "\n");
+        constructString.append("Head : " + head + "\n");
+
+        for(Object x : this) {
+            constructString.append("ref  : " + it + "  next : " + it.next + "  data :  " + x + "\n" );
+            it=it.next;
+        }
+
+        return constructString.toString();
+    }
+
+}//LinkedListClass
